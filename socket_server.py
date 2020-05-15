@@ -20,14 +20,14 @@ class Listener:
         if type(data) is str:
             json_data = json.dumps(data)
         else:
-            json_data = json.dumps(data.decode('utf-8'))
-        self.connection.send(bytes(json_data, encoding='utf-8'))
+            json_data = json.dumps(data.decode('iso-8859-1'))
+        self.connection.send(bytes(json_data, encoding='iso-8859-1'))
 
     def reliable_receive(self):
         json_data = ''
         while True:
             try:
-                json_data += self.connection.recv(1024).decode('utf-8')
+                json_data += self.connection.recv(1024).decode('iso-8859-1')
                 return json.loads(json_data)
             except Exception as e:
                 continue
@@ -46,4 +46,4 @@ class Listener:
 
 
 if __name__ == '__main__':
-    Listener('192.168.0.28', 4444).run()
+    Listener('192.168.0.10', 4444).run()

